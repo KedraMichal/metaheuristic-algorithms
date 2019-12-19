@@ -1,8 +1,11 @@
 import pandas as pd
 import random as rd
 import xlrd
+import sklearn
 
 df = pd.read_excel('data.xlsx')
+df = sklearn.utils.shuffle(df)
+df = df.reset_index(drop=True)
 count_rows = len(df)
 
 def swap(data, a, b):
@@ -56,7 +59,7 @@ df['Nakiedy'] = 0
 whenend(df)
 odch(df)
 
-for i in range(300):
+for i in range(50000):
     final = main(df)
     df = final.copy()
 #result
