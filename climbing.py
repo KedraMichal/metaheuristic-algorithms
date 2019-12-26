@@ -58,7 +58,7 @@ df['Nakiedy'] = 0
 whenend(df)
 odch(df)
 
-for i in range(50000):
+for i in range(40000):
     final = main(df)
     df = final.copy()
 #result
