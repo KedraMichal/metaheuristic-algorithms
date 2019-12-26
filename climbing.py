@@ -54,7 +54,6 @@ def main(data):
     else:
          return data_copy2
 
-
 df['Nakiedy'] = 0
 whenend(df)
 odch(df)
