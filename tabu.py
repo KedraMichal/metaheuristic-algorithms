@@ -36,21 +36,27 @@ def main(data):
     print("dzial")
     add_first = True
     minimalna = 0
+    print(tabu_list)
     for i in range(count_rows-1):
         for j in range(i+1, count_rows):
-            swap(data, i, j)
+            x1 = df.iloc[i, 0] -1
+            x2 = df.iloc[j, 0] -1
+            print(x1)
+            print(x2)
+            swap(data,x1, x2)
             whenend(data)
             odch(data)
             odchylenia = data.odchy.sum()
             comb.append(odchylenia)
-            if (i, j) not in tabu_list:
+            if (x1, x2) not in tabu_list or (x2, x1) not in tabu_list:
                 if add_first is True or odchylenia < minimalna:
                     add_first = False
-                    first = i
-                    second = j
+                    first = x1
+                    second = x2
                     minimalna = odchylenia
-            swap(data, i, j)
+            swap(data, x1, x2)
 
+    print(comb)
     swap(data, first, second)
     tabu(tabu_list, first, second)
     whenend(data)
@@ -63,7 +69,7 @@ whenend(df)
 odch(df)
 
 #liczba iteracji
-for i in range(5):
+for i in range(1):
     final = main(df)
     df = final.copy()
 
