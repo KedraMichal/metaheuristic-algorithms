@@ -1,9 +1,12 @@
 import pandas as pd
 import random as rd
 import numpy as np
+import sklearn
 import xlrd
 
 df = pd.read_excel('data.xlsx', delimiter=';')
+df = sklearn.utils.shuffle(df)
+df = df.reset_index(drop=True)
 count_rows = len(df)
 
 def swap(data, a, b):
@@ -26,72 +29,56 @@ def whenend(data):
 def odch(data):
     df['odchy'] = (df.Termin - df.Nakiedy) ** 2
 
-
-
-# w funkcji okreslamy dlugosc
 def sasiedztwo():
     list = []
-    while len(list)<5:
+    while len(list)<6: #maksymalna dlugosc sasiedztwa
         random = rd.randint(0, count_rows-1)
         if random not in list:
             list.append(random)
     return list
 
-temp = 205000
+temp = 300000
 def templow():
     global temp
-    temp =temp * 0.99
+    temp =temp * 0.999
 
 def main(data):
     data_copy = data.copy()
     min1 = data.odchy.sum()
     s = sasiedztwo()
-
     min_sas = []
-    for i in range(4):
+    for i in range(4):# dlugosc sasiedztwa
         swap(data, s[0], s[i+1])
         whenend(data)
         odch(data)
         min_sas.append(data.odchy.sum())
-
         swap(data, s[0], s[i+1])
 
-
-    best_sas = min(min_sas)
-    best_index = min_sas.index(min(min_sas))
-    print(best_index)
-    print(s[0], s[best_index+1])
+    best_sas = min(min_sas) #najlepszy wynik z sasiedztwa
+    best_index = min_sas.index(min(min_sas)) #indeks najlepszego rozw w sasiedztwie
     swap(data, s[0], s[best_index+1])
     whenend(data)
     odch(data)
-
     data_copy2 = data.copy()
-
-    print(min1, best_sas)
-
-    prob = np.exp((abs(min1-best_sas))/temp).copy()
-    prob2 = round(1/prob, 4)
+    prob = 1/(np.exp((abs(min1-best_sas))/temp))
     w = rd.random()
-    print(prob2, w)
+    print(min1, best_sas, prob, w)
     templow()
-    if min1 < best_sas and prob2<w:
+    if min1 < best_sas and prob<w:
         return data_copy
     else:
-
         return data_copy2
 
 
 df['Nakiedy'] = 0
 whenend(df)
 odch(df)
-for i in range(1500):
+for i in range(10000):
     final = main(df)
     df = final.copy()
-#result
 print(final.odchy.sum())
 
-
-final.to_csv("result_sum.csv")
+final.to_csv("result_sim.csv", index=False)
 
 
 
