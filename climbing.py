@@ -28,7 +28,6 @@ def whenend(data):
 def odch(data):
     df['odchy'] = (df.Termin - df.Nakiedy) ** 2
 
-
 def random():
     a = rd.randint(0, count_rows-1)
     b = rd.randint(0, count_rows-1)
@@ -39,10 +38,10 @@ def random():
 
 def main(data):
     data_copy = data.copy()
-    min1 = data.odchy.sum()
+    min1 = data_copy.odchy.sum()
     k = random()
-    random1 = (k[0])
-    random2 = (k[1])
+    random1 = k[0]
+    random2 = k[1]
     swap(data, random1, random2)
     whenend(data)
     odch(data)
@@ -58,12 +57,12 @@ df['Nakiedy'] = 0
 whenend(df)
 odch(df)
 
-for i in range(40000):
+for i in range(100000):
     final = main(df)
     df = final.copy()
-#result
+
 print(final.odchy.sum())
 
-final.to_csv("climbing_result.csv")
+final.to_csv("climbing_result.csv", index=False)
 
 
