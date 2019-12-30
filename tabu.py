@@ -1,7 +1,10 @@
 import pandas as pd
 import xlrd
+import sklearn
 
 df = pd.read_excel('data.xlsx', delimiter=';')
+df = sklearn.utils.shuffle(df)
+df = df.reset_index(drop=True)
 count_rows = len(df)
 
 def swap(data, a, b):
@@ -41,8 +44,6 @@ def main(data):
         for j in range(i+1, count_rows):
             x1 = df.iloc[i, 0] -1
             x2 = df.iloc[j, 0] -1
-            print(x1)
-            print(x2)
             swap(data,x1, x2)
             whenend(data)
             odch(data)
@@ -56,7 +57,6 @@ def main(data):
                     minimalna = odchylenia
             swap(data, x1, x2)
 
-    print(comb)
     swap(data, first, second)
     tabu(tabu_list, first, second)
     whenend(data)
@@ -67,17 +67,16 @@ def main(data):
 df['Nakiedy'] = 0
 whenend(df)
 odch(df)
+print(df.odchy.sum())
 
-#liczba iteracji
-for i in range(1):
+for i in range(15):
     final = main(df)
     df = final.copy()
 
-#result
 print(final.odchy.sum())
 
 
-final.to_csv("tabu.csv")
+final.to_csv("tabu_result.csv", index=False)
 
 
 
